@@ -1,0 +1,11 @@
+{
+  "name": "anti-gravity",
+  "version": "1.0.0",
+  "description": "Audits a website for AI-discoverability and on-site-engagement problems, producing a findings + suggested-actions report.",
+  "skills": [
+    { "id": "orchestrator", "path": "skills/orchestrator", "entrypoint": true },
+    { "id": "reach-and-read", "path": "skills/reach-and-read" },
+    { "id": "trust-and-identity", "path": "skills/trust-and-identity" },
+    { "id": "engagement-audit", "path": "skills/engagement-audit" }
+  ]
+}

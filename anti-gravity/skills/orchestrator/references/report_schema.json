@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anti-Gravity Audit Report",
+  "type": "object",
+  "required": ["site", "audited_at", "summary", "findings"],
+  "properties": {
+    "site": { "type": "string" },
+    "audited_at": { "type": "string", "format": "date-time" },
+    "summary": {
+      "type": "object",
+      "required": ["total_findings", "critical", "high", "medium", "low"],
+      "properties": {
+        "total_findings": { "type": "integer" },
+        "critical": { "type": "integer" },
+        "high": { "type": "integer" },
+        "medium": { "type": "integer" },
+        "low": { "type": "integer" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "severity", "evidence", "suggested_action"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^F-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "category": { "type": "string", "enum": ["off-site-discoverability", "on-site-engagement"] },
+          "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "evidence": { "type": "string" },
+          "suggested_action": {
+            "type": "object",
+            "required": ["summary", "priority"],
+            "properties": {
+              "summary": { "type": "string" },
+              "detail": { "type": "string" },
+              "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] }
+            }
+          }
+        }
+      }
+    },
+    "opportunities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "rationale", "suggested_action"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^O-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "rationale": { "type": "string" },
+          "suggested_action": {
+            "type": "object",
+            "required": ["summary", "priority"],
+            "properties": {
+              "summary": { "type": "string" },
+              "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] }
+            }
+          }
+        }
+      }
+    }
+  },
+  "_priority_convention": "priority = f(severity, effort). Effort is a rough tag ('low'|'medium'|'high') assigned per sourceCheck in scoreSummary.js EFFORT_BY_CHECK. A critical+low-effort finding is ranked above a critical+high-effort finding, since it is more immediately actionable — see scoreSummary.js for the exact lookup table."
+}

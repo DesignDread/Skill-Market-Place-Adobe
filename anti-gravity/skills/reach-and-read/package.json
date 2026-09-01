@@ -1,0 +1,14 @@
+{
+  "name": "reach-and-read",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "main": "scripts/index.js",
+  "dependencies": {
+    "undici": "6.19.8",
+    "cheerio": "1.0.0",
+    "robots-parser": "3.0.1",
+    "ajv": "8.17.1",
+    "playwright": "1.47.2"
+  }
+}

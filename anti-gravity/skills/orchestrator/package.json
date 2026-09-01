@@ -1,0 +1,13 @@
+{
+  "name": "orchestrator",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "main": "scripts/index.js",
+  "dependencies": {
+    "cheerio": "1.0.0",
+    "reach-and-read": "file:../reach-and-read",
+    "trust-and-identity": "file:../trust-and-identity",
+    "engagement-audit": "file:../engagement-audit"
+  }
+}

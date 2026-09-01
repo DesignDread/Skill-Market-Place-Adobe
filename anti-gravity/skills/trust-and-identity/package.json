@@ -1,0 +1,11 @@
+{
+  "name": "trust-and-identity",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "main": "scripts/index.js",
+  "dependencies": {
+    "undici": "6.19.8",
+    "cheerio": "1.0.0"
+  }
+}
