@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.DS_Store
+report.json
+data/
+.env
+.env.local
+dashboard/.next/
+dashboard/node_modules/
