@@ -1,4 +1,4 @@
-# site-iq
+# skill-iq
 
 An Agent Skill Marketplace that audits a website for AI-discoverability and
 on-site-engagement problems, and emits a structured report of findings and
@@ -74,7 +74,7 @@ further setup is required.
 
 ## Gemini API Integration
 
-site-iq can use a **Google Gemini API key** for two enhanced features:
+skill-iq can use a **Google Gemini API key** for two enhanced features:
 
 1. **AI-Powered Claim Extraction** — Instead of simple regex, Gemini analyzes
    the homepage text to extract all verifiable factual claims (founding year,
@@ -185,7 +185,7 @@ npx skills-ref validate ./skills/orchestrator
 ## Architecture
 
 ```
-site-iq/
+skill-iq/
 ├── run-audit.js              # CLI entry point
 ├── marketplace.json          # Skill marketplace manifest
 ├── .env.example              # Environment variable template

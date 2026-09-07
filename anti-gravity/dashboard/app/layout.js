@@ -2,7 +2,7 @@ import './globals.css';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'SiteIQ Dashboard',
+  title: 'SkillIQ Dashboard',
   description: 'Intelligence for the AI-first web — AI-discoverability audit tool',
 };
 
@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
       <body className="flex h-screen bg-slate-900 text-slate-50 font-sans overflow-hidden">
         <aside className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col">
           <div className="p-6 border-b border-slate-700">
-            <h1 className="text-2xl font-bold tracking-tight text-blue-400">SiteIQ</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-blue-400">SkillIQ</h1>
             <p className="text-xs text-slate-400 mt-1">Audit Dashboard</p>
           </div>
           <nav className="flex-1 p-4 space-y-2">

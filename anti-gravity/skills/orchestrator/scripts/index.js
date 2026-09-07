@@ -54,7 +54,7 @@ function extractCoreClaims(homepageText) {
 }
 
 /**
- * Main entrypoint for the anti-gravity marketplace.
+ * Main entrypoint for the skill-iq marketplace.
  * @param {{ url: string, maxPages?: number, searchFn?: (q:string) => Promise<{url:string}[]>, apiKey?: string }} input
  */
 export async function runAudit({ url, maxPages = 15, searchFn, apiKey }) {
