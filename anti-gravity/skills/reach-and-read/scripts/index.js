@@ -6,11 +6,43 @@ import { checkStructuredData } from './structuredDataCheck.js';
 
 const PRIMARY_PATHS = ['/', '/about', '/pricing', '/contact', '/products'];
 
-function guessExpectedType(path) {
+function guessExpectedType(path, html) {
+  const $ = cheerio.load(html);
+
+  let hasJsonLdType = false;
+  $('script[type="application/ld+json"]').each((_, el) => {
+    try {
+      const data = JSON.parse($(el).html());
+      if (data['@type'] || (Array.isArray(data) && data.some(d => d['@type']))) {
+        hasJsonLdType = true;
+      }
+    } catch { /* ignore parse errors */ }
+  });
+  if (hasJsonLdType) return null;
+
+  const ogType = $('meta[property="og:type"]').attr('content');
+  if (ogType) {
+    if (ogType === 'article') return 'Article';
+    if (ogType === 'product') return 'Product';
+    if (ogType === 'profile') return 'Organization';
+  }
+
+  if (/\/team\/|\/people\//i.test(path)) return 'Organization';
+  if (/\/event\//i.test(path)) return 'Event';
+  if (/\/service\//i.test(path)) return 'Service';
+  if (/\/recipe\//i.test(path)) return 'Recipe';
+  if (/\/review\//i.test(path)) return 'Review';
+
   if (/product/i.test(path)) return 'Product';
   if (/^\/(about|company)/i.test(path)) return 'Organization';
   if (/blog|article|news/i.test(path)) return 'Article';
   if (/faq/i.test(path)) return 'FAQPage';
+
+  const title = $('title').text().toLowerCase();
+  if (title.includes('faq')) return 'FAQPage';
+  if (title.includes('blog')) return 'Article';
+  if (title.includes('product')) return 'Product';
+
   return null;
 }
 
@@ -157,7 +189,7 @@ export async function runReachAndRead({ url, maxPages = 15 }) {
       const html = await body.text();
       htmlByUrl[diff.url] = html;
       const path = new URL(diff.url).pathname;
-      pagesForStructuredData.push({ url: diff.url, html, expectedType: guessExpectedType(path) });
+      pagesForStructuredData.push({ url: diff.url, html, expectedType: guessExpectedType(path, html) });
       const metaResult = await checkMetaAndCanonical(diff.url, html);
       findings.push(...metaResult.findings);
     } catch {
