@@ -1,75 +1,128 @@
+/**
+ * Merge and deduplicate findings from all three audit skills, then split
+ * into schema-compliant findings vs. opportunities with sequential IDs.
+ */
+
 const SEVERITY_RANK = { critical: 0, high: 1, medium: 2, low: 3 };
 
 /**
- * Very simple similarity check: two findings are considered duplicates if
- * they share the same sourceCheck and their titles overlap substantially
- * (normalized word-set Jaccard similarity above a threshold). This is a
- * cheap heuristic, not semantic dedup — good enough for the narrow case
- * of two detectors independently noticing the same surface symptom.
+ * Compute Jaccard similarity on word sets of two strings.
  */
-function titleSimilarity(a, b) {
-  const wordsA = new Set(a.toLowerCase().split(/\W+/).filter(Boolean));
-  const wordsB = new Set(b.toLowerCase().split(/\W+/).filter(Boolean));
-  if (wordsA.size === 0 || wordsB.size === 0) return 0;
-  const intersection = [...wordsA].filter((w) => wordsB.has(w)).length;
-  const union = new Set([...wordsA, ...wordsB]).size;
-  return intersection / union;
-}
-
-function isDuplicate(a, b) {
-  if (a.sourceCheck !== b.sourceCheck) return false;
-  return titleSimilarity(a.title, b.title) > 0.5;
+function jaccardWords(a, b) {
+  const setA = new Set(a.toLowerCase().split(/\s+/).filter(Boolean));
+  const setB = new Set(b.toLowerCase().split(/\s+/).filter(Boolean));
+  if (setA.size === 0 && setB.size === 0) return 1;
+  let intersection = 0;
+  for (const w of setA) {
+    if (setB.has(w)) intersection++;
+  }
+  const union = new Set([...setA, ...setB]).size;
+  return union === 0 ? 0 : intersection / union;
 }
 
 /**
- * Merges finding arrays from multiple detector skills, deduplicating
- * near-identical findings and keeping the one with more specific evidence
- * (longer evidence string, as a simple proxy for specificity).
+ * Merge an array of finding arrays (one per skill) into a single
+ * deduplicated list.  Near-identical findings (same sourceCheck +
+ * Jaccard word overlap > 0.6 on title) are collapsed, keeping whichever
+ * has the longer evidence string.
  *
- * @param {object[][]} findingArrays
- * @returns {object[]} deduplicated, unordered findings (raw, no IDs yet)
+ * @param {object[][]} findingsArrays - e.g. [reachFindings, trustFindings, engagementFindings]
+ * @returns {object[]}
  */
-export function mergeFindings(findingArrays) {
-  const all = findingArrays.flat();
+export function mergeFindings(findingsArrays) {
+  const flat = findingsArrays.flat();
   const kept = [];
 
-  for (const finding of all) {
-    const dupIndex = kept.findIndex((k) => isDuplicate(k, finding));
-    if (dupIndex === -1) {
+  for (const finding of flat) {
+    let isDuplicate = false;
+    for (let i = 0; i < kept.length; i++) {
+      const existing = kept[i];
+      // Same detector check AND highly overlapping title → probable duplicate
+      if (
+        existing.sourceCheck &&
+        finding.sourceCheck &&
+        existing.sourceCheck === finding.sourceCheck &&
+        jaccardWords(existing.title || '', finding.title || '') > 0.6
+      ) {
+        isDuplicate = true;
+        // Keep the one with longer / more specific evidence
+        if ((finding.evidence || '').length > (existing.evidence || '').length) {
+          kept[i] = finding;
+        }
+        break;
+      }
+    }
+    if (!isDuplicate) {
       kept.push(finding);
-    } else if (finding.evidence.length > kept[dupIndex].evidence.length) {
-      kept[dupIndex] = finding; // keep the more specific one
     }
   }
+
   return kept;
 }
 
 /**
- * Splits merged findings into confirmed findings vs. opportunities, then
- * sorts each by severity rank (findings) or leaves opportunities in
- * detector-run order, and assigns sequential IDs.
+ * Split merged findings into confirmed findings (F-001…) and
+ * opportunities (O-001…), sorted by severity, and formatted to
+ * match report_schema.json.
+ *
+ * Internal-only fields (sourceCheck, isOpportunity) are stripped.
+ *
+ * @param {object[]} findings
+ * @returns {{ findings: object[], opportunities: object[] }}
  */
-export function splitAndAssignIds(mergedFindings) {
-  const findings = mergedFindings.filter((f) => !f.isOpportunity);
-  const opportunityRaw = mergedFindings.filter((f) => f.isOpportunity);
+export function splitAndAssignIds(findings) {
+  const confirmed = [];
+  const opportunities = [];
 
-  findings.sort((a, b) => (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9));
+  for (const f of findings) {
+    if (f.isOpportunity) {
+      opportunities.push(f);
+    } else {
+      confirmed.push(f);
+    }
+  }
 
-  const findingsWithIds = findings.map((f, i) => ({
-    id: `F-${String(i + 1).padStart(3, '0')}`,
-    title: f.title,
-    category: f.category,
-    severity: f.severity,
-    evidence: f.evidence,
-    suggested_action: f.suggested_action,
-  }));
+  // Sort each group by severity rank (critical first)
+  const bySeverity = (a, b) =>
+    (SEVERITY_RANK[a.severity] ?? 3) - (SEVERITY_RANK[b.severity] ?? 3);
 
-  const opportunitiesWithIds = opportunityRaw.map((f, i) => ({
-    id: `O-${String(i + 1).padStart(3, '0')}`,
-    title: f.title,
-    rationale: f.evidence,
-    suggested_action: f.suggested_action,
-  }));
+  confirmed.sort(bySeverity);
+  opportunities.sort(bySeverity);
 
-  return { findings: findingsWithIds, opportunities: opportunitiesWithIds };
+  const formatFinding = (f, idx) => {
+    const id = `F-${String(idx + 1).padStart(3, '0')}`;
+    const result = {
+      id,
+      title: f.title,
+      category: f.category || 'off-site-discoverability',
+      severity: f.severity,
+      evidence: f.evidence || '',
+      suggested_action: {
+        summary: f.suggested_action?.summary || '',
+        priority: f.suggested_action?.priority || 'medium',
+      },
+    };
+    if (f.suggested_action?.detail) {
+      result.suggested_action.detail = f.suggested_action.detail;
+    }
+    return result;
+  };
+
+  const formatOpportunity = (f, idx) => {
+    const id = `O-${String(idx + 1).padStart(3, '0')}`;
+    return {
+      id,
+      title: f.title,
+      rationale: f.evidence || f.rationale || '',
+      suggested_action: {
+        summary: f.suggested_action?.summary || '',
+        priority: f.suggested_action?.priority || 'low',
+      },
+    };
+  };
+
+  return {
+    findings: confirmed.map(formatFinding),
+    opportunities: opportunities.map(formatOpportunity),
+  };
 }
