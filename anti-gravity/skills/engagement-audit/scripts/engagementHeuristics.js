@@ -135,6 +135,77 @@ async function checkBrokenLinks(links, origin, sampleSize = 10) {
   return findings;
 }
 
+function measureClickDepth(pages, homepageUrl) {
+  const findings = [];
+  const origin = new URL(homepageUrl).origin;
+  const adj = new Map();
+
+  for (const page of pages) {
+    const pageUrl = page.url;
+    if (!adj.has(pageUrl)) {
+      adj.set(pageUrl, new Set());
+    }
+
+    const $ = cheerio.load(page.html);
+    $('a[href]').each((_, el) => {
+      try {
+        const abs = new URL($(el).attr('href'), pageUrl);
+        abs.hash = '';
+        if (abs.origin === origin) {
+          adj.get(pageUrl).add(abs.href);
+        }
+      } catch { /* skip */ }
+    });
+  }
+
+  const queue = [{ url: homepageUrl, depth: 0 }];
+  const visited = new Map();
+  visited.set(homepageUrl, 0);
+
+  while (queue.length > 0) {
+    const { url, depth } = queue.shift();
+    const neighbors = adj.get(url) || new Set();
+
+    for (const neighbor of neighbors) {
+      if (!visited.has(neighbor)) {
+        visited.set(neighbor, depth + 1);
+        queue.push({ url: neighbor, depth: depth + 1 });
+      }
+    }
+  }
+
+  const intentPattern = /\/(pricing|contact|signup|sign-up|register|product|demo|trial)\b/i;
+
+  for (const page of pages) {
+    const url = page.url;
+    const path = new URL(url).pathname;
+
+    if (intentPattern.test(path)) {
+      const depth = visited.has(url) ? visited.get(url) : Infinity;
+
+      if (depth > 3) {
+        const severity = depth > 5 ? 'high' : 'medium';
+        const displayDepth = depth === Infinity ? 'unreachable via sampled links' : depth;
+
+        findings.push({
+          title: `Key intent page buried deep in site structure`,
+          category: 'on-site-engagement',
+          severity,
+          evidence: `${url}: is a key intent page but requires ${displayDepth} clicks from homepage.`,
+          suggested_action: {
+            summary: 'Link to key intent pages (pricing, contact, etc.) closer to the homepage, ideally in main navigation.',
+            detail: 'High click depth increases drop-off before users or agents can complete primary tasks.',
+            priority: severity,
+          },
+          sourceCheck: 'click-depth',
+        });
+      }
+    }
+  }
+
+  return findings;
+}
+
 /**
  * Runs all engagement checks against a set of already-fetched pages.
  * @param {{url: string, html: string}[]} pages
@@ -162,6 +233,7 @@ export async function runEngagementHeuristics(pages) {
   if (pages.length > 0) {
     const origin = new URL(pages[0].url).origin;
     findings.push(...await checkBrokenLinks(Array.from(allInternalLinks), origin));
+    findings.push(...measureClickDepth(pages, pages[0].url));
   }
 
   return { findings };
