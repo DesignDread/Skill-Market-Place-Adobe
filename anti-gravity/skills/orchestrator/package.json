@@ -6,6 +6,7 @@
   "main": "scripts/index.js",
   "dependencies": {
     "cheerio": "1.0.0",
+    "@google/generative-ai": "^0.21.0",
     "reach-and-read": "file:../reach-and-read",
     "trust-and-identity": "file:../trust-and-identity",
     "engagement-audit": "file:../engagement-audit"

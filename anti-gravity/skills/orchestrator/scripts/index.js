@@ -4,6 +4,7 @@ import { runTrustAndIdentity } from 'trust-and-identity/scripts/index.js';
 import { runEngagementAudit } from 'engagement-audit/scripts/index.js';
 import { mergeFindings, splitAndAssignIds } from './mergeFindings.js';
 import { applyComputedPriority, computeSummary } from './scoreSummary.js';
+import { extractClaimsWithGemini, createGeminiSearchFn } from './geminiProvider.js';
 
 function guessBrandName(homepageHtml) {
   const $ = cheerio.load(homepageHtml || '');
@@ -33,37 +34,54 @@ function guessBrandName(homepageHtml) {
   return name || null;
 }
 
+/**
+ * Legacy regex fallback for claim extraction — used when no Gemini
+ * API key is available.
+ */
 function extractCoreClaims(homepageText) {
-  // Lightweight heuristic extraction of a couple of factual-sounding
-  // sentences to attempt corroboration on — not exhaustive, deliberately
-  // conservative to avoid noisy/irrelevant search queries.
   const claims = [];
   const foundedMatch = homepageText.match(/founded in (\d{4})/i);
   if (foundedMatch) claims.push(`founded in ${foundedMatch[1]}`);
   const hqMatch = homepageText.match(/headquartered in ([A-Z][a-zA-Z\s,]+?)[.,]/);
   if (hqMatch) claims.push(`headquartered in ${hqMatch[1].trim()}`);
+  const employeeMatch = homepageText.match(/(\d[\d,]+)\+?\s*employees/i);
+  if (employeeMatch) claims.push(`${employeeMatch[1]} employees`);
+  const customerMatch = homepageText.match(/(\d[\d,]+)\+?\s*(customers|clients|users)/i);
+  if (customerMatch) claims.push(`${customerMatch[1]} ${customerMatch[2]}`);
+  const revenueMatch = homepageText.match(/\$\s*([\d.]+)\s*(million|billion)\s*(revenue|valuation|ARR)/i);
+  if (revenueMatch) claims.push(`$${revenueMatch[1]} ${revenueMatch[2]} ${revenueMatch[3]}`);
   return claims;
 }
 
 /**
  * Main entrypoint for the anti-gravity marketplace.
- * @param {{ url: string, maxPages?: number, searchFn?: (q:string) => Promise<{url:string}[]> }} input
+ * @param {{ url: string, maxPages?: number, searchFn?: (q:string) => Promise<{url:string}[]>, apiKey?: string }} input
  */
-export async function runAudit({ url, maxPages = 15, searchFn }) {
+export async function runAudit({ url, maxPages = 15, searchFn, apiKey }) {
   const reach = await runReachAndRead({ url, maxPages });
 
   const homepageHtml = reach.context.dom.htmlByUrl[url] || '';
   const homepageText = reach.context.dom.rawText || '';
   const brandName = guessBrandName(homepageHtml);
-  const coreClaims = extractCoreClaims(homepageText);
   const siteDomain = new URL(url).hostname.replace(/^www\./, '');
+
+  // Use Gemini for claim extraction when API key is available, else regex fallback
+  let coreClaims;
+  if (apiKey) {
+    coreClaims = await extractClaimsWithGemini(homepageText, apiKey);
+  } else {
+    coreClaims = extractCoreClaims(homepageText);
+  }
+
+  // Auto-create search function via Gemini grounding when no custom searchFn is provided
+  const effectiveSearchFn = searchFn || createGeminiSearchFn(apiKey);
 
   const trust = await runTrustAndIdentity({
     brandName: brandName || siteDomain,
     coreClaims,
     homepageHtml,
     homepageText,
-    searchFn,
+    searchFn: effectiveSearchFn,
     siteDomain,
   });
 
