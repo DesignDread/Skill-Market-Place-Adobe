@@ -18,6 +18,7 @@ const EFFORT_BY_CHECK = {
   viewport: 'low',
   'trust-signals': 'low',
   'broken-links': 'medium',
+  'click-depth': 'medium',
 };
 
 const EFFORT_RANK = { low: 0, medium: 1, high: 2 };
