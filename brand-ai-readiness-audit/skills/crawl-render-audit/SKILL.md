@@ -1,5 +1,5 @@
 ---
-name: reach-and-read
+name: crawl-render-audit
 description: Check whether a website's key content can actually be reached and read by an automated crawler — robots.txt access, raw-HTML vs JS-rendered content gaps, structured data (JSON-LD/schema.org) presence and validity, HTTP status/redirect health, and whether key facts are stated in plain extractable text versus locked in images, PDFs, or video. Use as the first step of any AI-discoverability audit, since a page that fails to be reached or read makes every downstream signal moot.
 license: MIT
 allowed-tools: ["fetch", "headless-browser"]

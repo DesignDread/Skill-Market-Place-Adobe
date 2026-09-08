@@ -1,5 +1,5 @@
 ---
-name: trust-and-identity
+name: freshness-corroboration
 description: Check whether a brand's key claims are corroborated by independent third-party sources and whether the brand is disambiguated from other entities sharing its name — cross-source agreement, sameAs/entity-linking signals, and staleness of dated claims. Use for the trust/corroboration half of an AI-discoverability audit; requires a web-search-capable tool and degrades gracefully to a documented low-confidence mode when one isn't available.
 license: MIT
 allowed-tools: ["fetch", "web_search"]

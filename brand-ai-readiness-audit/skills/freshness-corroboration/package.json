@@ -1,5 +1,5 @@
 {
-  "name": "trust-and-identity",
+  "name": "freshness-corroboration",
   "version": "1.0.0",
   "type": "module",
   "engines": { "node": ">=20" },

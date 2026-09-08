@@ -1,5 +1,5 @@
 {
-  "name": "reach-and-read",
+  "name": "crawl-render-audit",
   "version": "1.0.0",
   "type": "module",
   "engines": { "node": ">=20" },
