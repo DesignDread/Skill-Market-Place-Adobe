@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "skill-iq Audit Report",
+  "title": "Brand AI-Readiness Audit Report",
   "type": "object",
   "required": ["site", "audited_at", "summary", "findings"],
   "properties": {

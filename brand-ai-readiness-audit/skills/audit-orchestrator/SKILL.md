@@ -1,11 +1,11 @@
 ---
-name: orchestrator
-description: Entrypoint for the skill-iq marketplace. Given a website URL, runs reach-and-read, trust-and-identity, and engagement-audit, merges and deduplicates their findings, assigns IDs and priorities, and emits a single structured audit report covering both AI-discoverability and on-site-engagement. Use this skill directly when asked to audit a website's AI readiness; it composes the other three skills internally.
+name: audit-orchestrator
+description: Entrypoint for the brand-ai-readiness-audit marketplace. Given a website URL, runs crawl-render-audit, freshness-corroboration, and engagement-audit, merges and deduplicates their findings, assigns IDs and priorities, and emits a single structured audit report covering both AI-discoverability and on-site-engagement. Use this skill directly when asked to audit a website's AI readiness; it composes the other three skills internally.
 license: MIT
 allowed-tools: ["fetch", "headless-browser", "web_search"]
 ---
 
-# skill-iq Orchestrator
+# Brand AI-Readiness Audit Orchestrator
 
 ## When to use
 This is the single entrypoint for a full audit. Invoke it with a URL; it composes the other three skills in this marketplace and returns one report. Do not invoke the sub-skills directly unless debugging in isolation — only the orchestrator performs merge/dedupe/prioritization.

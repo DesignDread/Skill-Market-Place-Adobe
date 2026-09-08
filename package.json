@@ -1,5 +1,5 @@
 {
-  "name": "skill-iq",
+  "name": "brand-ai-readiness-audit-app",
   "version": "1.0.0",
   "type": "module",
   "private": true,
@@ -22,7 +22,7 @@
     "json2csv": "^6.0.0-alpha.2",
     "next": "latest",
     "node-cron": "^3.0.3",
-    "orchestrator": "file:./anti-gravity/skills/orchestrator",
+    "orchestrator": "file:./brand-ai-readiness-audit/skills/audit-orchestrator",
     "postcss": "^8.4.35",
     "react": "latest",
     "react-chartjs-2": "^5.2.0",

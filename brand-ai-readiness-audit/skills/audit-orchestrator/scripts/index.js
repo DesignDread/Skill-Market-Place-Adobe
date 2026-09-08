@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
-import { runReachAndRead } from '../../reach-and-read/scripts/index.js';
-import { runTrustAndIdentity } from '../../trust-and-identity/scripts/index.js';
+import { runReachAndRead } from '../../crawl-render-audit/scripts/index.js';
+import { runTrustAndIdentity } from '../../freshness-corroboration/scripts/index.js';
 import { runEngagementAudit } from '../../engagement-audit/scripts/index.js';
 import { mergeFindings, splitAndAssignIds } from './mergeFindings.js';
 import { applyComputedPriority, computeSummary } from './scoreSummary.js';
@@ -54,7 +54,7 @@ function extractCoreClaims(homepageText) {
 }
 
 /**
- * Main entrypoint for the skill-iq marketplace.
+ * Main entrypoint for the brand-ai-readiness-audit marketplace.
  * @param {{ url: string, maxPages?: number, searchFn?: (q:string) => Promise<{url:string}[]>, apiKey?: string }} input
  */
 export async function runAudit({ url, maxPages = 15, searchFn, apiKey }) {
