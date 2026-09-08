@@ -1,29 +1,66 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
-  --border: #334155;
-  
-  --severity-critical: #ef4444;
-  --severity-high: #f97316;
-  --severity-medium: #eab308;
-  --severity-low: #3b82f6;
+  --background: #07111f;
+  --foreground: #e8f0f7;
+  --card: rgba(16, 31, 51, 0.72);
+  --card-foreground: #e8f0f7;
+  --popover: #10213a;
+  --popover-foreground: #e8f0f7;
+  --primary: #58d6d2;
+  --primary-foreground: #062027;
+  --secondary: #182d48;
+  --secondary-foreground: #c8d8e8;
+  --muted: #102038;
+  --muted-foreground: #91a6ba;
+  --accent: #9a8cff;
+  --accent-foreground: #100d2b;
+  --border: rgba(149, 178, 207, 0.16);
+  --input: rgba(149, 178, 207, 0.2);
+  --ring: #58d6d2;
+  --radius: 1rem;
+  --severity-critical: #ff6b86;
+  --severity-high: #ffad66;
+  --severity-medium: #f4d06f;
+  --severity-low: #63b3ed;
 }
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { border-color: var(--border); }
+html { background: var(--background); }
 body {
-  background-color: var(--background);
+  min-height: 100vh;
+  background: radial-gradient(circle at 80% 0%, rgba(88, 214, 210, 0.11), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(154, 140, 255, 0.1), transparent 30rem), var(--background);
   color: var(--foreground);
 }
-
+.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); }
 .severity-critical { color: var(--severity-critical); }
 .severity-high { color: var(--severity-high); }
 .severity-medium { color: var(--severity-medium); }
 .severity-low { color: var(--severity-low); }
-
 .bg-severity-critical { background-color: var(--severity-critical); }
 .bg-severity-high { background-color: var(--severity-high); }
 .bg-severity-medium { background-color: var(--severity-medium); }
 .bg-severity-low { background-color: var(--severity-low); }
+::selection { background: rgba(88, 214, 210, .3); }

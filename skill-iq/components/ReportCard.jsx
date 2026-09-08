@@ -5,23 +5,8 @@ export default function ReportCard({ report }) {
   const date = new Date(report.audited_at).toLocaleDateString();
   const time = new Date(report.audited_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const sum = report.summary || {};
-
-  return (
-    <Link href={`/reports/${report.id}`} className="block bg-slate-800 border border-slate-700 hover:border-blue-500 rounded-xl p-5 transition group">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="font-semibold text-lg text-slate-100 group-hover:text-blue-400 transition">{report.site}</h3>
-          <p className="text-xs text-slate-400">{date} at {time}</p>
-        </div>
-        <div className="text-2xl font-bold text-slate-300">{sum.total_findings || 0}</div>
-      </div>
-      <div className="flex gap-2 text-xs">
-        {sum.critical > 0 && <span className="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-1 rounded">{sum.critical} Critical</span>}
-        {sum.high > 0 && <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 px-2 py-1 rounded">{sum.high} High</span>}
-        {sum.medium > 0 && <span className="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded">{sum.medium} Medium</span>}
-        {sum.low > 0 && <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-1 rounded">{sum.low} Low</span>}
-        {Object.keys(sum).length === 0 && <span className="text-slate-500">No findings</span>}
-      </div>
-    </Link>
-  );
+  return <Link href={`/reports/${report.id}`} className="glass-panel group block rounded-2xl p-5 transition hover:-translate-y-1 hover:border-primary/50">
+    <div className="flex items-start justify-between gap-4"><div className="min-w-0"><h3 className="truncate text-lg font-semibold transition group-hover:text-primary">{report.site}</h3><p className="mt-1 font-mono text-[10px] uppercase tracking-[.12em] text-muted-foreground">{date} · {time}</p></div><div className="text-2xl font-semibold text-primary">{sum.total_findings || 0}</div></div>
+    <div className="mt-5 flex flex-wrap gap-2 text-xs">{sum.critical > 0 && <span className="rounded-full border border-severity-critical/30 bg-severity-critical/10 px-2.5 py-1 text-severity-critical">{sum.critical} critical</span>}{sum.high > 0 && <span className="rounded-full border border-severity-high/30 bg-severity-high/10 px-2.5 py-1 text-severity-high">{sum.high} high</span>}{sum.medium > 0 && <span className="rounded-full border border-severity-medium/30 bg-severity-medium/10 px-2.5 py-1 text-severity-medium">{sum.medium} medium</span>}{sum.low > 0 && <span className="rounded-full border border-severity-low/30 bg-severity-low/10 px-2.5 py-1 text-severity-low">{sum.low} low</span>}{Object.keys(sum).length === 0 && <span className="text-muted-foreground">No findings</span>}</div>
+  </Link>;
 }

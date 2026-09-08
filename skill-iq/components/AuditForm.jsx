@@ -8,64 +8,20 @@ export default function AuditForm({ onAuditComplete }) {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
+    e.preventDefault(); setLoading(true); setError('');
     try {
-      const res = await fetch('/api/audit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, maxPages }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Audit failed');
-      
+      const res = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, maxPages }) });
+      const data = await res.json(); if (!res.ok) throw new Error(data.error || 'Audit failed');
       onAuditComplete(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">Target URL</label>
-        <input 
-          type="url" 
-          value={url} 
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com"
-          required
-          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">Max Pages to Audit: {maxPages}</label>
-        <input 
-          type="range" 
-          min="1" max="100" 
-          value={maxPages} 
-          onChange={(e) => setMaxPages(Number(e.target.value))}
-          className="w-full accent-blue-500"
-        />
-      </div>
-      {error && <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded">{error}</div>}
-      <button 
-        type="submit" 
-        disabled={loading}
-        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-medium py-2 rounded-lg transition flex justify-center items-center"
-      >
-        {loading ? (
-          <span className="flex items-center gap-2">
-            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            Running Audit...
-          </span>
-        ) : 'Run Audit'}
-      </button>
-    </form>
-  );
+  return <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-5 md:p-7">
+    <div className="flex flex-col gap-6">
+      <div><label htmlFor="target-url" className="mb-2 block font-mono text-xs uppercase tracking-[.16em] text-muted-foreground">Target URL</label><input id="target-url" type="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://your-product.com" required className="w-full rounded-xl border border-input bg-background/60 px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20" /></div>
+      <div><div className="mb-2 flex items-center justify-between"><label htmlFor="max-pages" className="font-mono text-xs uppercase tracking-[.16em] text-muted-foreground">Crawl depth</label><span className="rounded-full bg-primary/10 px-3 py-1 font-mono text-xs text-primary">{maxPages} pages</span></div><input id="max-pages" type="range" min="1" max="100" value={maxPages} onChange={(e) => setMaxPages(Number(e.target.value))} className="w-full accent-primary" /></div>
+      {error && <div role="alert" className="rounded-xl border border-severity-critical/30 bg-severity-critical/10 p-3 text-sm text-severity-critical">{error}</div>}
+      <button type="submit" disabled={loading} className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:brightness-110 disabled:cursor-wait disabled:opacity-60">{loading ? 'Running intelligence scan…' : 'Start audit  →'}</button>
+    </div>
+  </form>;
 }
