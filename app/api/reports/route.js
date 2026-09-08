@@ -4,7 +4,7 @@ import { listReports } from '../../../lib/storage.js';
 export async function GET() {
   try {
     const reports = listReports();
-    return NextResponse.json(reports);
+    return NextResponse.json(Array.isArray(reports) ? reports : []);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to list reports' }, { status: 500 });
   }
