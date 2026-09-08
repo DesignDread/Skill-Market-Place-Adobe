@@ -1,6 +1,25 @@
 {
-  "name": "skill-iq-root",
+  "name": "skill-iq",
   "version": "1.0.0",
   "type": "module",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "audit": "node run-audit.js"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "chart.js": "^4.4.0",
+    "json2csv": "^6.0.0-alpha.2",
+    "next": "latest",
+    "node-cron": "^3.0.3",
+    "orchestrator": "file:./anti-gravity/skills/orchestrator",
+    "postcss": "^8.4.35",
+    "react": "latest",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "latest",
+    "tailwindcss": "^4.0.0"
+  }
 }
