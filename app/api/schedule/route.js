@@ -5,9 +5,10 @@ import { addSchedule } from '../../../lib/scheduler.js';
 export async function GET() {
   try {
     const schedules = getSchedules();
-    return NextResponse.json(schedules);
+    return NextResponse.json(Array.isArray(schedules) ? schedules : []);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to get schedules' }, { status: 500 });
+    console.error('[v0] Failed to get schedules:', error);
+    return NextResponse.json([], { status: 200 });
   }
 }
 
