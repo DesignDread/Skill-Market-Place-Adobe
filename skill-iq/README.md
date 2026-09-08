@@ -133,10 +133,10 @@ A full-featured **Next.js dashboard** is included for a visual audit experience.
 ### Setup
 
 ```bash
-cd dashboard && npm install
+npm install
 ```
 
-Create `dashboard/.env.local`:
+Create `.env.local`:
 ```
 GEMINI_API_KEY=your_key_here
 ```
@@ -144,7 +144,7 @@ GEMINI_API_KEY=your_key_here
 ### Running
 
 ```bash
-cd dashboard && npm run dev
+npm run dev
 ```
 
 Open http://localhost:3000
@@ -199,12 +199,12 @@ skill-iq/
 │   │   └── references/
 │   │       └── report_schema.json  # Output schema
 │   ├── reach-and-read/       # Discoverability: robots, render, schema, meta
-│   ├── trust-and-identity/   # Corroboration & disambiguation
+│   ���── trust-and-identity/   # Corroboration & disambiguation
 │   └── engagement-audit/     # CTAs, value prop, links, viewport, click-depth
-└── dashboard/                # Next.js web dashboard
-    ├── app/                  # App Router pages & API routes
-    ├── components/           # React UI components
-    └── lib/                  # Storage, scheduler, audit runner utilities
+├── app/                      # App Router pages & API routes
+├── components/               # React UI components
+├── lib/                      # Storage, scheduler, audit runner utilities
+└── anti-gravity/skills/      # Canonical audit skill packages
 ```
 
 ## Known limitations / next steps
