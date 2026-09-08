@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd skill-iq && pnpm install --frozen-lockfile",
+  "buildCommand": "cd skill-iq && pnpm build",
+  "outputDirectory": "skill-iq/.next"
+}
