@@ -8,11 +8,13 @@ export default function History() {
 
   useEffect(() => {
     fetch('/api/reports')
-      .then(res => res.json())
-      .then(data => {
-        setReports(data);
-        setLoading(false);
-      });
+      .then(res => {
+        if (!res.ok) throw new Error('Could not load audit history');
+        return res.json();
+      })
+      .then(data => setReports(Array.isArray(data) ? data : []))
+      .catch(() => setReports([]))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
