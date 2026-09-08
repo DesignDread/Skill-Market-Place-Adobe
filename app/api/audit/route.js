@@ -9,14 +9,11 @@ import { saveReport } from '../../../lib/storage.js';
 async function runAuditProcess(url, maxPages) {
   const { spawn } = await import('node:child_process');
   const path = await import('node:path');
-  const { fileURLToPath } = await import('node:url');
 
-  // Resolve the project root (three levels up from app/api/audit/)
-  const root = path.default.resolve(
-    path.default.dirname(fileURLToPath(import.meta.url)),
-    '../../../../'
-  );
-  const cliPath = path.default.join(root, 'run-audit.js');
+  // Vercel runs the server bundle from the project root. Using process.cwd()
+  // avoids resolving above the deployment filesystem (for example /var).
+  const root = process.cwd();
+  const cliPath = path.default.resolve(root, 'run-audit.js');
   const apiKey = process.env.GEMINI_API_KEY;
 
   const args = [cliPath, url, '--maxPages', String(maxPages || 15)];
