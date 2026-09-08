@@ -11,9 +11,12 @@ export default function AuditForm({ onAuditComplete }) {
     e.preventDefault(); setLoading(true); setError('');
     try {
       const res = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, maxPages }) });
-      const data = await res.json(); if (!res.ok) throw new Error(data.error || 'Audit failed');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Audit failed. Please try again.');
       onAuditComplete(data);
-    } catch (err) { setError(err.message); } finally { setLoading(false); }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Audit failed. Please try again.');
+    } finally { setLoading(false); }
   };
 
   return <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-5 md:p-7">
