@@ -10,7 +10,7 @@
 // This imports the orchestrator directly. Make sure you've run `npm install`
 // in all four skills/* folders first (see README.md "Setup").
 
-import { runAudit } from './skills/orchestrator/scripts/index.js';
+import { runAudit } from './anti-gravity/skills/orchestrator/scripts/index.js';
 
 const args = process.argv.slice(2);
 const url = args[0];

@@ -29,7 +29,7 @@ async function spawnAudit(url, maxPages, apiKey) {
 
   const root = path.default.resolve(
     path.default.dirname(fileURLToPath(import.meta.url)),
-    '../../../'
+    '../'
   );
   const cliPath = path.default.join(root, 'run-audit.js');
 

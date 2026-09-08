@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, '../../../');
+const root = path.resolve(__dirname, '../');
 const cliPath = path.join(root, 'run-audit.js');
 
 const activeJobs = new Map();
