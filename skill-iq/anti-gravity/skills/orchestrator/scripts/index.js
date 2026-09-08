@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
-import { runReachAndRead } from 'reach-and-read/scripts/index.js';
-import { runTrustAndIdentity } from 'trust-and-identity/scripts/index.js';
-import { runEngagementAudit } from 'engagement-audit/scripts/index.js';
+import { runReachAndRead } from '../../reach-and-read/scripts/index.js';
+import { runTrustAndIdentity } from '../../trust-and-identity/scripts/index.js';
+import { runEngagementAudit } from '../../engagement-audit/scripts/index.js';
 import { mergeFindings, splitAndAssignIds } from './mergeFindings.js';
 import { applyComputedPriority, computeSummary } from './scoreSummary.js';
 import { extractClaimsWithGemini, createGeminiSearchFn } from './geminiProvider.js';

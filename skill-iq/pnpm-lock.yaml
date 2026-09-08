@@ -8,12 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@google/generative-ai':
+        specifier: ^0.21.0
+        version: 0.21.0
       '@tailwindcss/postcss':
         specifier: ^4.0.0
         version: 4.3.3
+      ajv:
+        specifier: 8.17.1
+        version: 8.17.1
       chart.js:
         specifier: ^4.4.0
         version: 4.5.1
+      cheerio:
+        specifier: 1.0.0
+        version: 1.0.0
       json2csv:
         specifier: ^6.0.0-alpha.2
         version: 6.0.0-alpha.2
@@ -26,6 +35,9 @@ importers:
       orchestrator:
         specifier: file:./anti-gravity/skills/orchestrator
         version: file:anti-gravity/skills/orchestrator
+      playwright:
+        specifier: 1.47.2
+        version: 1.47.2
       postcss:
         specifier: ^8.4.35
         version: 8.5.28
@@ -38,9 +50,15 @@ importers:
       react-dom:
         specifier: latest
         version: 19.2.8(react@19.2.8)
+      robots-parser:
+        specifier: 3.0.1
+        version: 3.0.1
       tailwindcss:
         specifier: ^4.0.0
         version: 4.3.3
+      undici:
+        specifier: 6.19.8
+        version: 6.19.8
 
 packages:
 
@@ -727,10 +745,6 @@ packages:
     resolution: {integrity: sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g==}
     engines: {node: '>=18.17'}
 
-  undici@6.28.1:
-    resolution: {integrity: sha512-zWpdTVD54H48CIybL0rWQ3ukpb9d23wM7eH5RtfdmeP70cWHNjtfo7P4vZX+5CoDcO53J4Pu5uXp7lNfjc6DRA==}
-    engines: {node: '>=18.17'}
-
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
@@ -1022,7 +1036,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 6.28.1
+      undici: 6.19.8
       whatwg-mimetype: 4.0.0
 
   client-only@0.0.1: {}
@@ -1324,8 +1338,6 @@ snapshots:
   tslib@2.8.1: {}
 
   undici@6.19.8: {}
-
-  undici@6.28.1: {}
 
   uuid@8.3.2: {}
 
