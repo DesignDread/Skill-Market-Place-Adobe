@@ -1,4 +1,8 @@
-import { request } from 'undici';
+import { Agent, interceptors, request } from 'undici';
+
+const redirectDispatcher = new Agent({
+  interceptors: { Client: [interceptors.redirect({ maxRedirections: 3 })] },
+});
 import robotsParser from 'robots-parser';
 
 /**
@@ -25,7 +29,7 @@ export async function checkRobots(baseUrl, candidatePaths = ['/']) {
   try {
     const { statusCode, body } = await request(robotsUrl, {
       method: 'GET',
-      maxRedirections: 3,
+      dispatcher: redirectDispatcher,
       headersTimeout: 10_000,
     });
     if (statusCode >= 200 && statusCode < 300) {

@@ -1,5 +1,9 @@
 import * as cheerio from 'cheerio';
-import { request } from 'undici';
+import { Agent, interceptors, request } from 'undici';
+
+const redirectDispatcher = new Agent({
+  interceptors: { Client: [interceptors.redirect({ maxRedirections: 3 })] },
+});
 
 const CTA_VERBS = /\b(buy|shop|get started|sign up|subscribe|contact|book|schedule|request|learn more|try|download|order|add to cart|start free|apply)\b/i;
 
@@ -111,7 +115,7 @@ async function checkBrokenLinks(links, origin, sampleSize = 10) {
   const broken = [];
   await Promise.all(sample.map(async (link) => {
     try {
-      const { statusCode } = await request(link, { method: 'HEAD', headersTimeout: 8000, maxRedirections: 3 });
+      const { statusCode } = await request(link, { method: 'HEAD', headersTimeout: 8000, dispatcher: redirectDispatcher });
       if (statusCode >= 400) broken.push({ link, statusCode });
     } catch {
       broken.push({ link, statusCode: 'unreachable' });

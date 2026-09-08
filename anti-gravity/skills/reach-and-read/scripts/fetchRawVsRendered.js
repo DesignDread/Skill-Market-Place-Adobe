@@ -1,5 +1,9 @@
-import { request } from 'undici';
+import { Agent, interceptors, request } from 'undici';
 import * as cheerio from 'cheerio';
+
+const redirectDispatcher = new Agent({
+  interceptors: { Client: [interceptors.redirect({ maxRedirections: 5 })] },
+});
 
 const UA = 'AntiGravityAuditBot/1.0 (+read-only audit; no auth; respects robots.txt)';
 
@@ -9,7 +13,7 @@ const UA = 'AntiGravityAuditBot/1.0 (+read-only audit; no auth; respects robots.
 async function fetchRawText(url) {
   const { statusCode, body, headers } = await request(url, {
     method: 'GET',
-    maxRedirections: 5,
+    dispatcher: redirectDispatcher,
     headersTimeout: 15_000,
     headers: { 'user-agent': UA },
   });
