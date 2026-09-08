@@ -11,10 +11,10 @@ async function runAuditProcess(url, maxPages) {
   const path = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
-  // Resolve the project root (three levels up from app/api/audit/)
+  // Resolve the project root from app/api/audit/.
   const root = path.default.resolve(
     path.default.dirname(fileURLToPath(import.meta.url)),
-    '../../../../'
+    '../../../'
   );
   const cliPath = path.default.join(root, 'run-audit.js');
   const apiKey = process.env.GEMINI_API_KEY;
