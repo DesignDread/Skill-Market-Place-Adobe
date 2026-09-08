@@ -5,6 +5,7 @@ import ReportCard from '../../components/ReportCard';
 export default function History() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetch('/api/reports')
@@ -12,8 +13,15 @@ export default function History() {
         if (!res.ok) throw new Error('Could not load audit history');
         return res.json();
       })
-      .then(data => setReports(Array.isArray(data) ? data : []))
-      .catch(() => setReports([]))
+      .then(data => {
+        if (!Array.isArray(data)) throw new Error('Invalid audit history response');
+        setReports(data);
+      })
+      .catch(err => {
+        console.error('[v0] Failed to load audit history:', err);
+        setReports([]);
+        setError(err instanceof Error ? err.message : 'Could not load audit history');
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -23,12 +31,19 @@ export default function History() {
       {loading ? (
         <div className="text-slate-400">Loading history...</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <>
+          {error && (
+            <div role="alert" className="mb-6 rounded-lg border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+              {error}
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {reports.map(report => (
             <ReportCard key={report.id} report={report} />
           ))}
-          {reports.length === 0 && <div className="col-span-full text-slate-400 bg-slate-800/50 border border-slate-700 p-8 rounded-xl text-center">No audits found. Run one to get started.</div>}
-        </div>
+            {reports.length === 0 && <div className="col-span-full text-slate-400 bg-slate-800/50 border border-slate-700 p-8 rounded-xl text-center">No audits found. Run one to get started.</div>}
+          </div>
+        </>
       )}
     </div>
   );

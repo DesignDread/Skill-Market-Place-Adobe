@@ -6,6 +6,7 @@ export async function GET() {
     const reports = listReports();
     return NextResponse.json(Array.isArray(reports) ? reports : []);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to list reports' }, { status: 500 });
+    console.error('[v0] Failed to list reports:', error);
+    return NextResponse.json([], { status: 200 });
   }
 }

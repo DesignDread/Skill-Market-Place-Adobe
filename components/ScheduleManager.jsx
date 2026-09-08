@@ -6,34 +6,58 @@ export default function ScheduleManager() {
   const [url, setUrl] = useState('');
   const [cron, setCron] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchSchedules();
   }, []);
 
   const fetchSchedules = async () => {
-    const res = await fetch('/api/schedule');
-    const data = await res.json();
-    setSchedules(data);
+    try {
+      const res = await fetch('/api/schedule');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'Could not load schedules');
+      setSchedules(Array.isArray(data) ? data : []);
+      setError('');
+    } catch (err) {
+      console.error('[v0] Failed to load schedules:', err);
+      setSchedules([]);
+      setError(err instanceof Error ? err.message : 'Could not load schedules');
+    }
   };
 
   const handleAdd = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch('/api/schedule', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, cron })
-    });
-    setUrl('');
-    setCron('');
-    fetchSchedules();
-    setLoading(false);
+    try {
+      const res = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, cron })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'Could not create schedule');
+      setUrl('');
+      setCron('');
+      setError('');
+      await fetchSchedules();
+    } catch (err) {
+      console.error('[v0] Failed to create schedule:', err);
+      setError(err instanceof Error ? err.message : 'Could not create schedule');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    await fetch(`/api/schedule/${id}`, { method: 'DELETE' });
-    fetchSchedules();
+    try {
+      const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Could not delete schedule');
+      await fetchSchedules();
+    } catch (err) {
+      console.error('[v0] Failed to delete schedule:', err);
+      setError(err instanceof Error ? err.message : 'Could not delete schedule');
+    }
   };
 
   return (
@@ -57,6 +81,12 @@ export default function ScheduleManager() {
           <button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition disabled:opacity-50">Add Schedule</button>
         </form>
       </div>
+
+      {error && (
+        <div role="alert" className="rounded-lg border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+          {error}
+        </div>
+      )}
 
       <div>
         <h2 className="text-xl font-semibold mb-4 text-slate-100">Active Schedules</h2>
