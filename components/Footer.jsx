@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex gap-6 font-medium">
           <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
           <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-          <a href="https://github.com/DesignDread/Skill-Market-Place-Adobe" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
+          <a href="https://github.com/DesignDread/Skill-Market-Place-Adobe" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
         </div>
       </div>
     </footer>
