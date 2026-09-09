@@ -1,5 +1,32 @@
 # Brand AI-Readiness Audit
 
+> An Agent Skill Marketplace built for **Adobe University Hackathon 2026 — Round 3**.
+
+## Team
+
+- **Anubhav Garg**
+- **Gunn Khurana**
+- **Divya**
+
+## About
+
+This project is an Agent Skill Marketplace that audits websites for AI discoverability and on-site engagement. It identifies problems, provides evidence and severity, and generates prioritized recommendations for improvement.
+
+## Skills
+
+| Skill | Description |
+| --- | --- |
+| **Audit Orchestrator** | Entry point that coordinates the audit and produces the final report |
+| **Crawl & Render Audit** | Detects crawlability, rendering, and structured-data issues |
+| **Freshness & Corroboration** | Checks factual freshness, corroboration, and entity clarity |
+| **Engagement Audit** | Evaluates issues affecting on-site engagement |
+
+## How It Works
+
+The entrypoint skill receives a website audit request, composes the outputs of the individual skills, and produces a single structured audit report containing findings, evidence, severity, and suggested actions.
+
+---
+
 A Next.js application and Agent Skill Marketplace for auditing a public website's AI discoverability, content extractability, trust signals, and on-site engagement.
 
 ## What this project contains

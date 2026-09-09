@@ -5,6 +5,11 @@ import WorkspaceNav from '../components/WorkspaceNav';
 export const metadata = {
   title: 'SkillIQ | AI Discoverability Intelligence',
   description: 'Professional AI-discoverability audits for the modern web.',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -14,7 +19,7 @@ export default function RootLayout({ children }) {
         <aside className="hidden w-72 shrink-0 border-r border-border/70 bg-card/40 p-5 backdrop-blur-xl md:flex md:flex-col">
           <div className="flex items-center gap-1 border-b border-border/70 px-2 pb-6">
             {/* Version the local asset so replaced logos are not served from cache. */}
-            <Image src="/logo.png?v=2" alt="Brand AI Readiness Audit" width={180} height={72} className="h-auto w-40 object-contain" priority unoptimized />
+            <Image src="/logo.png?v=3" alt="Brand AI Readiness Audit" width={180} height={72} className="h-auto w-40 object-contain" priority unoptimized />
             <div><h1 className="text-lg font-semibold tracking-tight">SkillIQ</h1><p className="font-mono text-[10px] uppercase tracking-[.2em] text-muted-foreground">Intelligence layer</p></div>
           </div>
           <WorkspaceNav />
