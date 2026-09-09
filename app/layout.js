@@ -1,6 +1,7 @@
 import './globals.css';
 import Image from 'next/image';
 import WorkspaceNav from '../components/WorkspaceNav';
+import Navbar from '../components/Navbar';
 
 export const metadata = {
   title: 'SkillIQ | AI Discoverability Intelligence',
@@ -14,18 +15,34 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark bg-background">
-      <body className="flex min-h-screen bg-background text-foreground font-sans">
-        <aside className="hidden w-72 shrink-0 border-r border-border/70 bg-card/40 p-5 backdrop-blur-xl md:flex md:flex-col">
-          <div className="flex items-center gap-1 border-b border-border/70 px-2 pb-6">
-            {/* Version the local asset so replaced logos are not served from cache. */}
-            <Image src="/logo.png?v=3" alt="Brand AI Readiness Audit" width={180} height={72} className="h-auto w-40 object-contain" priority unoptimized />
-            <div><h1 className="text-lg font-semibold tracking-tight">SkillIQ</h1><p className="font-mono text-[10px] uppercase tracking-[.2em] text-muted-foreground">Intelligence layer</p></div>
-          </div>
-          <WorkspaceNav />
-          <div className="rounded-2xl border border-border/70 bg-secondary/50 p-4"><p className="font-mono text-[10px] uppercase tracking-[.18em] text-primary">System status</p><div className="mt-3 flex items-center gap-2 text-sm"><span className="size-2 rounded-full bg-primary shadow-[0_0_12px_var(--primary)]" />All systems operational</div></div>
-        </aside>
-        <main className="min-w-0 flex-1 overflow-auto"><div className="mx-auto max-w-7xl p-5 md:p-10">{children}</div></main>
+    <html lang="en" className="dark bg-background" suppressHydrationWarning>
+      <body className="flex min-h-screen flex-col bg-background text-foreground font-sans">
+        {/* Horizontal navbar at the very top */}
+        <Navbar />
+
+        {/* Below the navbar: sidebar + main content */}
+        <div className="flex flex-1">
+          <aside className="hidden w-60 shrink-0 border-r border-border/70 bg-card/40 p-5 backdrop-blur-xl md:flex md:flex-col">
+            <div className="flex items-center gap-2 border-b border-border/70 px-2 pb-5">
+              <Image src="/logo.png?v=3" alt="Brand AI Readiness Audit" width={32} height={32} className="h-7 w-7 object-contain" priority unoptimized />
+              <div>
+                <h1 className="text-sm font-semibold tracking-tight">SkillIQ</h1>
+                <p className="font-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground">Intelligence layer</p>
+              </div>
+            </div>
+            <WorkspaceNav />
+            <div className="rounded-2xl border border-border/70 bg-secondary/50 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[.18em] text-primary">System status</p>
+              <div className="mt-3 flex items-center gap-2 text-sm">
+                <span className="size-2 rounded-full bg-primary shadow-[0_0_12px_var(--primary)]" />
+                All systems operational
+              </div>
+            </div>
+          </aside>
+          <main className="min-w-0 flex-1 overflow-auto">
+            <div className="mx-auto max-w-7xl p-5 md:p-10">{children}</div>
+          </main>
+        </div>
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
-:root {
+/* ── Dark theme (default) ── */
+:root,
+.dark {
   --background: #07111f;
   --foreground: #e8f0f7;
   --card: rgba(16, 31, 51, 0.72);
@@ -23,6 +25,31 @@
   --severity-high: #ffad66;
   --severity-medium: #f4d06f;
   --severity-low: #63b3ed;
+}
+
+/* ── Light theme ── */
+.light {
+  --background: #f8fafb;
+  --foreground: #1a2332;
+  --card: rgba(255, 255, 255, 0.85);
+  --card-foreground: #1a2332;
+  --popover: #ffffff;
+  --popover-foreground: #1a2332;
+  --primary: #0e9a96;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eef3;
+  --secondary-foreground: #3a4f65;
+  --muted: #edf1f5;
+  --muted-foreground: #5a6f82;
+  --accent: #7c6dd8;
+  --accent-foreground: #ffffff;
+  --border: rgba(30, 60, 90, 0.12);
+  --input: rgba(30, 60, 90, 0.1);
+  --ring: #0e9a96;
+  --severity-critical: #dc2645;
+  --severity-high: #d97706;
+  --severity-medium: #ca8a04;
+  --severity-low: #2563eb;
 }
 
 @theme inline {
@@ -48,13 +75,23 @@
 }
 
 * { border-color: var(--border); }
-html { background: var(--background); }
+html {
+  background: var(--background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at 80% 0%, rgba(88, 214, 210, 0.11), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(154, 140, 255, 0.1), transparent 30rem), var(--background);
   color: var(--foreground);
+  transition: background 0.3s ease, color 0.3s ease;
 }
-.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); }
+.dark body {
+  background: radial-gradient(circle at 80% 0%, rgba(88, 214, 210, 0.11), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(154, 140, 255, 0.1), transparent 30rem), var(--background);
+}
+.light body {
+  background: radial-gradient(circle at 80% 0%, rgba(14, 154, 150, 0.06), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(124, 109, 216, 0.05), transparent 30rem), var(--background);
+}
+.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); transition: background 0.3s ease, border-color 0.3s ease; }
+.light .glass-panel { box-shadow: 0 8px 30px rgba(0,0,0,.06); }
 .severity-critical { color: var(--severity-critical); }
 .severity-high { color: var(--severity-high); }
 .severity-medium { color: var(--severity-medium); }
@@ -64,3 +101,5 @@ body {
 .bg-severity-medium { background-color: var(--severity-medium); }
 .bg-severity-low { background-color: var(--severity-low); }
 ::selection { background: rgba(88, 214, 210, .3); }
+.light ::selection { background: rgba(14, 154, 150, .2); }
+
