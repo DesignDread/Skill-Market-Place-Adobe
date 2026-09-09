@@ -27,13 +27,13 @@ export default function History() {
 
   return (
     <div className="max-w-6xl mx-auto pb-12 space-y-6">
-      <h2 className="text-3xl font-bold text-slate-100 mb-6">Audit History</h2>
+      <h2 className="text-3xl font-bold text-foreground mb-6">Audit History</h2>
       {loading ? (
-        <div className="text-slate-400">Loading history...</div>
+        <div className="text-muted-foreground">Loading history...</div>
       ) : (
         <>
           {error && (
-            <div role="alert" className="mb-6 rounded-lg border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+            <div role="alert" className="mb-6 rounded-lg border border-severity-critical/30 bg-severity-critical/10 px-4 py-3 text-sm text-severity-critical">
               {error}
             </div>
           )}
@@ -41,7 +41,7 @@ export default function History() {
           {reports.map(report => (
             <ReportCard key={report.id} report={report} />
           ))}
-            {reports.length === 0 && <div className="col-span-full text-slate-400 bg-slate-800/50 border border-slate-700 p-8 rounded-xl text-center">No audits found. Run one to get started.</div>}
+            {reports.length === 0 && <div className="col-span-full text-muted-foreground glass-panel p-8 rounded-xl text-center">No audits found. Run one to get started.</div>}
           </div>
         </>
       )}
