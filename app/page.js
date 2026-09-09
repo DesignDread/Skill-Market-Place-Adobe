@@ -59,17 +59,20 @@ export default function Home() {
               <strong className="text-foreground"> recommend</strong> your content.
             </p>
 
-            {/* Stats row */}
-            <div className="hero-fade-in-delay mt-8 flex flex-wrap gap-6">
+            {/* Skill highlights */}
+            <div className="hero-fade-in-delay mt-8 flex flex-wrap gap-3">
               {[
-                { value: '40+', label: 'Audit checks' },
-                { value: '4', label: 'Skill modules' },
-                { value: '<2m', label: 'Avg scan time' },
-              ].map(({ value, label }) => (
-                <div key={label} className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-primary md:text-3xl">{value}</span>
-                  <span className="text-sm text-muted-foreground">{label}</span>
-                </div>
+                'Crawl & Render',
+                'Structured Data',
+                'Corroboration',
+                'Engagement',
+              ].map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-lg border border-border/70 bg-secondary/50 px-3 py-1.5 font-mono text-xs text-muted-foreground"
+                >
+                  {skill}
+                </span>
               ))}
             </div>
           </div>
