@@ -1,10 +1,16 @@
 import './globals.css';
-import Image from 'next/image';
 import WorkspaceNav from '../components/WorkspaceNav';
+
+const brandLogoUrl = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled%20design%20%289%29-EoRL7JXaa0P6LeDgxK7MsWK5c379Po.png';
 
 export const metadata = {
   title: 'SkillIQ | AI Discoverability Intelligence',
   description: 'Professional AI-discoverability audits for the modern web.',
+  icons: {
+    icon: brandLogoUrl,
+    shortcut: brandLogoUrl,
+    apple: brandLogoUrl,
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -13,8 +19,7 @@ export default function RootLayout({ children }) {
       <body className="flex min-h-screen bg-background text-foreground font-sans">
         <aside className="hidden w-72 shrink-0 border-r border-border/70 bg-card/40 p-5 backdrop-blur-xl md:flex md:flex-col">
           <div className="flex items-center gap-1 border-b border-border/70 px-2 pb-6">
-            {/* Version the local asset so replaced logos are not served from cache. */}
-            <Image src="/logo.png?v=2" alt="Brand AI Readiness Audit" width={180} height={72} className="h-auto w-40 object-contain" priority unoptimized />
+            <img src={brandLogoUrl} alt="SkillIQ" width="180" height="72" className="h-auto w-40 object-contain" />
             <div><h1 className="text-lg font-semibold tracking-tight">SkillIQ</h1><p className="font-mono text-[10px] uppercase tracking-[.2em] text-muted-foreground">Intelligence layer</p></div>
           </div>
           <WorkspaceNav />
