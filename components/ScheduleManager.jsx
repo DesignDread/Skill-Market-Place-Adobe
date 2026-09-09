@@ -35,6 +35,16 @@ export default function ScheduleManager() {
       setUrl(finalUrl);
     }
 
+    try {
+      const parsed = new URL(finalUrl);
+      if (!parsed.hostname.includes('.') && parsed.hostname !== 'localhost') {
+        throw new Error('Invalid domain');
+      }
+    } catch {
+      setError("Please enter a valid website URL (e.g., example.com).");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch('/api/schedule', {

@@ -16,6 +16,16 @@ export default function AuditForm({ onAuditComplete }) {
       setUrl(finalUrl);
     }
 
+    try {
+      const parsed = new URL(finalUrl);
+      if (!parsed.hostname.includes('.') && parsed.hostname !== 'localhost') {
+        throw new Error('Invalid domain');
+      }
+    } catch {
+      setError("Please enter a valid website URL (e.g., example.com).");
+      return;
+    }
+
     setLoading(true); setError('');
     try {
       const res = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: finalUrl, maxPages }) });
