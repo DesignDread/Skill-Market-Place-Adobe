@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-card/60 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5 md:px-10">
+      <div className="flex h-14 w-full items-center justify-between px-6">
         {/* Logo + Brand — horizontally placed */}
         <Link href="/" className="flex items-center gap-2.5">
           <Image
