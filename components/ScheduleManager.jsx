@@ -60,6 +60,12 @@ export default function ScheduleManager() {
     }
   };
 
+  const handleUrlBlur = () => {
+    if (url && !/^https?:\/\//i.test(url.trim())) {
+      setUrl(`https://${url.trim()}`);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="glass-panel p-6 rounded-xl">
@@ -67,7 +73,7 @@ export default function ScheduleManager() {
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-1">Target URL</label>
-            <input type="url" required value={url} onChange={e => setUrl(e.target.value)} className="w-full rounded-lg border border-input bg-background/60 px-4 py-2 text-foreground outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="https://example.com" />
+            <input type="url" required value={url} onChange={e => setUrl(e.target.value)} onBlur={handleUrlBlur} className="w-full rounded-lg border border-input bg-background/60 px-4 py-2 text-foreground outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="example.com" />
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-1">Cron Expression</label>
