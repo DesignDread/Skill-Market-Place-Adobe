@@ -28,12 +28,19 @@ export default function ScheduleManager() {
 
   const handleAdd = async (e) => {
     e.preventDefault();
+
+    let finalUrl = url.trim();
+    if (finalUrl && !/^https?:\/\//i.test(finalUrl)) {
+      finalUrl = `https://${finalUrl}`;
+      setUrl(finalUrl);
+    }
+
     setLoading(true);
     try {
       const res = await fetch('/api/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, cron })
+        body: JSON.stringify({ url: finalUrl, cron })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || 'Could not create schedule');
@@ -73,7 +80,7 @@ export default function ScheduleManager() {
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-1">Target URL</label>
-            <input type="url" required value={url} onChange={e => setUrl(e.target.value)} onBlur={handleUrlBlur} className="w-full rounded-lg border border-input bg-background/60 px-4 py-2 text-foreground outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="example.com" />
+            <input type="text" inputMode="url" autoCapitalize="none" autoCorrect="off" required value={url} onChange={e => setUrl(e.target.value)} onBlur={handleUrlBlur} className="w-full rounded-lg border border-input bg-background/60 px-4 py-2 text-foreground outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="example.com" />
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-1">Cron Expression</label>
