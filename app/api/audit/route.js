@@ -8,9 +8,11 @@ export const dynamic = 'force-dynamic';
 export async function POST(req) {
   try {
     const { url, maxPages } = await req.json();
+    const rawUrl = String(url || '').trim();
+    const normalizedUrl = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
     let target;
     try {
-      target = new URL(String(url || '').trim());
+      target = new URL(normalizedUrl);
     } catch {
       return NextResponse.json({ error: 'Enter a complete URL, such as https://chatgpt.com/' }, { status: 400 });
     }

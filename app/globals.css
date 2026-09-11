@@ -70,7 +70,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: 'Inter', 'Segoe UI', sans-serif;
+  --font-sans: 'Manrope', 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
 
@@ -90,7 +90,37 @@ body {
 .light body {
   background: radial-gradient(circle at 80% 0%, rgba(14, 154, 150, 0.06), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(124, 109, 216, 0.05), transparent 30rem), var(--background);
 }
-.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); transition: background 0.3s ease, border-color 0.3s ease; }
+.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+.audit-form { isolation: isolate; }
+.audit-form::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(88,214,210,.08), transparent 34%, transparent 70%, rgba(154,140,255,.06)); opacity: .8; pointer-events: none; }
+.audit-form-orb { background: radial-gradient(circle, var(--primary), transparent 68%); animation: heroFloat 9s ease-in-out infinite; }
+.audit-input-wrap::after { content: ''; position: absolute; inset: 1px; border-radius: 1rem; pointer-events: none; opacity: 0; box-shadow: 0 0 0 1px var(--primary), 0 0 28px rgba(88,214,210,.15); transition: opacity .3s ease; }
+.audit-input-wrap:focus-within::after { opacity: 1; }
+.audit-range { height: .4rem; appearance: none; border-radius: 999px; background: linear-gradient(90deg, var(--primary) 0%, var(--primary) 14%, var(--secondary) 14%, var(--secondary) 100%); cursor: pointer; }
+.audit-range::-webkit-slider-thumb { appearance: none; width: 1.15rem; height: 1.15rem; border: 3px solid var(--background); border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 0 16px rgba(88,214,210,.55); transition: transform .2s ease, box-shadow .2s ease; }
+.audit-range::-webkit-slider-thumb:hover { transform: scale(1.18); box-shadow: 0 0 0 1px var(--primary), 0 0 24px rgba(88,214,210,.8); }
+.audit-range::-moz-range-thumb { width: .85rem; height: .85rem; border: 3px solid var(--background); border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 0 16px rgba(88,214,210,.55); }
+.audit-submit { box-shadow: inset 0 1px 0 rgba(255,255,255,.22); }
+.audit-submit::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.22) 50%, transparent 75%); transform: translateX(-120%); transition: transform .7s ease; }
+.audit-submit:hover::after { transform: translateX(120%); }
+.light .audit-form::before { opacity: .5; }
+.light .audit-input-wrap::after { box-shadow: 0 0 0 1px var(--primary), 0 0 24px rgba(14,154,150,.12); }
+.light .audit-range { background: linear-gradient(90deg, var(--primary) 0%, var(--primary) 14%, #dbe5ea 14%, #dbe5ea 100%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .audit-form-orb, .audit-submit::after { animation: none; transition: none; }
+}
+
+@keyframes shimmer { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+@keyframes softPulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+.animate-shimmer { position: relative; overflow: hidden; }
+.animate-shimmer::after { content: ''; position: absolute; inset: 0; width: 45%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); transform: translateX(-110%); animation: shimmer 3.5s ease-in-out infinite; pointer-events: none; }
+.status-pulse { animation: softPulse 2.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
 .light .glass-panel { box-shadow: 0 8px 30px rgba(0,0,0,.06); }
 .severity-critical { color: var(--severity-critical); }
 .severity-high { color: var(--severity-high); }
