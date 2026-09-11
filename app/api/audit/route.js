@@ -6,11 +6,12 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+  let target = null;
+
   try {
     const { url, maxPages } = await req.json();
     const rawUrl = String(url || '').trim();
     const normalizedUrl = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
-    let target;
     try {
       target = new URL(normalizedUrl);
     } catch {

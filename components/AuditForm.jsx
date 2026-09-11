@@ -31,8 +31,19 @@ export default function AuditForm({ onAuditComplete }) {
     setLoading(true); setError('');
     try {
       const res = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: finalUrl, maxPages }) });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Audit failed. Please try again.');
+      const responseText = await res.text();
+      let data = {};
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = { error: 'The audit service returned an invalid response. Please try again.' };
+        }
+      }
+
+      if (!res.ok) throw new Error(data.error || `Audit failed (${res.status}). Please try again.`);
+      if (!data || typeof data !== 'object') throw new Error('The audit service returned an invalid response. Please try again.');
       onAuditComplete(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Audit failed. Please try again.');
