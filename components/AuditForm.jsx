@@ -7,14 +7,16 @@ export default function AuditForm({ onAuditComplete }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const normalizeUrl = (value) => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  };
+
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    
-    let finalUrl = url.trim();
-    if (finalUrl && !/^https?:\/\//i.test(finalUrl)) {
-      finalUrl = `https://${finalUrl}`;
-      setUrl(finalUrl);
-    }
+    e.preventDefault();
+
+    const finalUrl = normalizeUrl(url);
 
     try {
       const parsed = new URL(finalUrl);
