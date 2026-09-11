@@ -51,7 +51,7 @@ The repository has two layers:
 - Node.js 20 or newer
 - pnpm 10 or newer
 - A reachable public website to audit
-- A Gemini API key when AI-assisted summarization is enabled by the orchestrator
+- An optional `GEMINI_API_KEY` for AI-assisted claim extraction and Google Search corroboration. The audit still runs without it using deterministic extraction in degraded mode.
 
 ## Run locally
 
