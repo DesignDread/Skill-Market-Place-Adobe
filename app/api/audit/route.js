@@ -29,6 +29,25 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error('Audit API error:', error);
-    return NextResponse.json({ error: error.message || 'Audit failed' }, { status: 500 });
+
+    if (error?.code === 'ENOTFOUND' || error?.cause?.code === 'ENOTFOUND') {
+      return NextResponse.json({
+        error: `We couldn’t reach ${target?.hostname || 'that domain'}. Check the website address and try again.`,
+      }, { status: 502 });
+    }
+
+    if (error?.code === 'ECONNREFUSED' || error?.cause?.code === 'ECONNREFUSED') {
+      return NextResponse.json({
+        error: `The server at ${target?.hostname || 'that domain'} refused the connection. Try again later.`,
+      }, { status: 502 });
+    }
+
+    if (error?.code === 'ETIMEDOUT' || error?.cause?.code === 'ETIMEDOUT') {
+      return NextResponse.json({
+        error: `The connection to ${target?.hostname || 'that domain'} timed out. Check the address and try again.`,
+      }, { status: 504 });
+    }
+
+    return NextResponse.json({ error: 'We couldn’t complete the audit. Please check the URL and try again.' }, { status: 500 });
   }
 }
