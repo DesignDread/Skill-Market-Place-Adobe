@@ -70,7 +70,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: 'Inter', 'Segoe UI', sans-serif;
+  --font-sans: 'Manrope', 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
 
@@ -90,7 +90,18 @@ body {
 .light body {
   background: radial-gradient(circle at 80% 0%, rgba(14, 154, 150, 0.06), transparent 28rem), radial-gradient(circle at 0% 100%, rgba(124, 109, 216, 0.05), transparent 30rem), var(--background);
 }
-.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); transition: background 0.3s ease, border-color 0.3s ease; }
+.glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.18); backdrop-filter: blur(20px); transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+
+@keyframes shimmer { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+@keyframes softPulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+.animate-shimmer { position: relative; overflow: hidden; }
+.animate-shimmer::after { content: ''; position: absolute; inset: 0; width: 45%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); transform: translateX(-110%); animation: shimmer 3.5s ease-in-out infinite; pointer-events: none; }
+.status-pulse { animation: softPulse 2.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
 .light .glass-panel { box-shadow: 0 8px 30px rgba(0,0,0,.06); }
 .severity-critical { color: var(--severity-critical); }
 .severity-high { color: var(--severity-high); }

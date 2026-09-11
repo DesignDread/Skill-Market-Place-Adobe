@@ -23,8 +23,8 @@ export default function WorkspaceNav() {
             href={href}
             aria-current={isActive ? 'page' : undefined}
             className={isActive
-              ? 'rounded-xl bg-primary/10 px-3 py-3 text-sm font-medium text-primary transition hover:bg-primary/15'
-              : 'rounded-xl px-3 py-3 text-sm text-muted-foreground transition hover:bg-secondary hover:text-foreground'}
+              ? 'rounded-xl border border-primary/15 bg-primary/10 px-3 py-3 text-sm font-medium text-primary shadow-[inset_3px_0_0_var(--primary)] transition duration-300 hover:bg-primary/15'
+              : 'rounded-xl px-3 py-3 text-sm text-muted-foreground transition duration-300 hover:translate-x-0.5 hover:bg-secondary hover:text-foreground'}
           >
             {label} {external && <span className="float-right text-xs">↗</span>}
           </Link>

@@ -1,8 +1,12 @@
 import './globals.css';
+import { Manrope, IBM_Plex_Mono } from 'next/font/google';
 import WorkspaceNav from '../components/WorkspaceNav';
 import Navbar from '../components/Navbar';
 import ThemeProvider from '../components/ThemeProvider';
 import Footer from '../components/Footer';
+
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope', display: 'swap' });
+const plexMono = IBM_Plex_Mono({ subsets: ['latin'], variable: '--font-plex-mono', weight: ['400', '500', '600'], display: 'swap' });
 
 export const metadata = {
   title: 'SkillIQ | AI Discoverability Intelligence',
@@ -16,7 +20,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark bg-background" suppressHydrationWarning>
+    <html lang="en" className={`dark bg-background ${manrope.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col bg-background text-foreground font-sans">
         <ThemeProvider>
           {/* Horizontal navbar with logo */}
@@ -29,7 +33,7 @@ export default function RootLayout({ children }) {
               <div className="rounded-2xl border border-border/70 bg-secondary/50 p-4 mt-auto">
                 <p className="font-mono text-[10px] uppercase tracking-[.18em] text-primary">System status</p>
                 <div className="mt-3 flex items-center gap-2 text-sm">
-                  <span className="size-2 rounded-full bg-primary shadow-[0_0_12px_var(--primary)]" />
+                  <span className="status-pulse size-2 rounded-full bg-primary shadow-[0_0_12px_var(--primary)]" />
                   All systems operational
                 </div>
               </div>

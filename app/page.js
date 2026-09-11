@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-12 pb-12">
       {/* ── Hero Section ── */}
-      <header className="relative overflow-hidden rounded-3xl border border-border/70 bg-card/40 px-8 py-14 backdrop-blur-xl md:px-14 md:py-20">
+      <header className="animate-shimmer relative overflow-hidden rounded-3xl border border-border/70 bg-card/40 px-8 py-14 backdrop-blur-xl md:px-14 md:py-20">
         {/* Animated glow orbs */}
         <div className="hero-glow-1 absolute -top-20 right-10 h-72 w-72 rounded-full opacity-40 blur-3xl" />
         <div className="hero-glow-2 absolute -bottom-16 -left-10 h-60 w-60 rounded-full opacity-30 blur-3xl" />
